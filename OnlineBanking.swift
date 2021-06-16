@@ -12,8 +12,14 @@ class OnlineBanking : Bank {
     var ban = Bank()
     var  myAccount : Account  = Account(accNo: 0, accBalance: 0, transactions: [])
     var myCreditCard : Card = Card(cardNo: 0, expiryDate: 0, cvv: 0, pinNo: 0, account: Account(accNo: 0, accBalance: 0, transactions: []), cardStatus: true, pinValidationCount: 0)
-    
+    var username = "san_90"
+    var password = "hello"
 func getChoice1(){
+    print("Enter username ")
+    let user = readLine()!
+    print("Enter password")
+    let pass = readLine()!
+    if(user == username && pass== password){
     print("\n1.Add Your Account\n2.Add Your Credit Cards\n3.FundTransfer\n4.Transaction History\n5.Exit")
     print("\nEnter  your choice")
     let choice = Int(readLine()!)
@@ -35,6 +41,10 @@ func getChoice1(){
     default:
         print("Invalid choice")
         
+    }
+    }
+    else{
+        print("invalid password and username")
     }
 }
 func addAccount(){
