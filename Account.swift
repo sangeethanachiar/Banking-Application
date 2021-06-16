@@ -1,19 +1,19 @@
 //
 //  Account.swift
-//  Banks
+//  Banking App
 //
-//  Created by Sangeetha Nachiar on 10/06/21.
+//  Created by Sangeetha Nachiar on 14/06/21.
 //
 
 import Foundation
 class Account{
     var accNo : Int
-    var accBalance : Int
+    var accBalance : Double
     var transactions : [Transaction]
-    var accStatus : Bool = true
-    var pinValidationCount = 0
+  final  var minBalance = 500
     
-    init(accNo:Int,accBalance:Int,transactions:[Transaction]){
+    
+    init(accNo:Int,accBalance: Double,transactions:[Transaction]){
         self.accNo = accNo
         self.accBalance = accBalance
         self.transactions = transactions

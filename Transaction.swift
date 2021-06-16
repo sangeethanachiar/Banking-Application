@@ -1,19 +1,18 @@
 //
 //  Transaction.swift
-//  Banks
+//  Banking App
 //
-//  Created by Sangeetha Nachiar on 11/06/21.
+//  Created by Sangeetha Nachiar on 14/06/21.
 //
 
 import Foundation
-
-
-
 class Transaction{
-    var amount : Int
+    var amount : Double
+   // var transactionCount : Int
     var description : String?
-    init(amount:Int,description :String){
+    init(amount:Double,description :String){
         self.amount = amount
+      //  self.transactionCount = transactionCount
         self.description = description
     }
 }

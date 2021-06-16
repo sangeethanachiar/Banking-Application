@@ -1,93 +1,94 @@
 //
 //  ATM.swift
-//  Banks
+//  Banking App
 //
-//  Created by Sangeetha Nachiar on 11/06/21.
+//  Created by Sangeetha Nachiar on 14/06/21.
 //
 
 import Foundation
-class ATM :BankingSystem{
+class ATM : Bank{
+    
     var totalCash = 10000
+  //  var car = Card()
+    var ban = Bank()
+    var auth = Authentication()
+    
+    
     func getScreen(){
         while(totalCash>0){
                 print("\nWelcome To ATM Service")
-                 print("1.Withdrawal\n2.Balance Enquiry\n3.exit")
-                 print("Enter choice")
-                 let choice = Int(readLine()!)
-                 switch(choice){
-                 case 1:
-                     withdrawal()
-                 case 2:
-                     balanceEnquiry()
-                 case 3 :
-                    exit(0)
-                 default:
-                    print("invalid")
-                 }
-        }
+            
+            print("Enter Card No")
+            let cardNo = Int(readLine()!)!
+          //  getCardsByIndex(cardNo:cardNo)
+            let index = getCardsByIndex(cardNo:cardNo)
+            
+
+            if(index != -1 ){
+                print("\(ban.cards[index].cardNo)")
+        if(ban.cards[index].cardStatus){
+                //if(ban.cards[index + 1].cardStatus){
+                              print("Enter the pin")
+                             let pinNo = Int(readLine()!)!
+                                 if(auth.validate(index:index,password:pinNo)){
+                              print("1.Withdrawal\n2.Balance Enquiry\n3.Pin Change \n4.Mini Statement\n 5.exit")
+                              print("Enter choice")
+                              let choice = Int(readLine()!)
+                              switch(choice){
+                              case 1:
+                                 withdrawal(index:index)
+                              case 2:
+                                 balanceEnquiry(index:index)
+                              case 3 :
+                                 print("..3")
+                              //   pinChange(index:index)
+                              case 4:
+                                 print("4")
+                              //   miniStatement(index:index)
+                              case 5:
+                                 exit(0)
+                              default:
+                                 print("invalid")
+                              }
+                         } // validate pin
+                                 else{
+                                     ban.cards[index].pinValidationCount += 1
+                                     if(!(auth.validatePinInvalidCount(index:index))){
+                                         ban.cards[index].cardStatus  = false
+                                             print("Account has been blocked permanently...Due to three invalid attempts")
+                                         }
+                                         else{
+                                             print("invalid pin.. try again")
+                                         }
+                                     }
+                                } // card.Status
+                             else{
+                                 print("card has been blocked permanently")
+                                 }
+                             }
+                         else {
+                              print("Invalid card no .card doesnot exist")
+                             }
+                                     }
     }
- 
-    func validatePin(index: Int,pinNo :Int)->Bool{
-        if(cards[index].pinNo == pinNo){
+    
+        //}
+    func validateAmount(amount:Int)->Bool{
+        if(amount %  100 == 0){
             return true
         }
-         return false
-        }
-        func validatePinInvalidCount(index:Int)->Bool{
-            if( cards[index].account.pinValidationCount < 3){
-                return true
-            }
-            return false
-        }
+        return false
         
-        func validateAmount(amount:Int)->Bool{
-            if(amount %  100 == 0){
-                return true
-            }
-            return false
-            
+    }
+    
+    func validateAmountQuantity(amount :Int)->Bool{
+        if (amount <= 2000){
+            return true
         }
+        return false
+    }
         
-        func validateAmountQuantity(amount :Int)->Bool{
-            if (amount <= 2000){
-                return true
-            }
-            return false
-        }
-        func getCardsByIndex(accountNo : Int)->Int{
-            var result = 0
-                    for i in 0..<cards.count{
-                        if cards[i].account.accNo == accountNo{
-                             result =  i
-                        }
-                        else{
-                             result = -1
-                        }
-                        
-                    }
-             return result
-            }
-    func printTransactionReciept(index: Int,amt:Int){
-        print("----------TRANSACTION RECIEPT--------")
-        print("Location : Chennai")
-        print("Amount Debted : \(amt)")
-        print("Available Balance : \(cards[index].account.accBalance)")
-    }
-    func printBalanceReciept(index :Int){
-        print("----------BALANCE ENQUIRY RECIEPT--------")
-        print("Location : Chennai ")
-        print("Available Balance : \(cards[index].account.accBalance )")
-    }
-    func withdrawal(){
-        print("Enter the account No")
-        let accountNo = Int(readLine()!)!
-        let index = getCardsByIndex(accountNo:accountNo)
-        if(index != -1 ){
-            if(cards[index].account.accStatus){
-             //   if(accounts[index].accStatus){
-        print("Enter the pin")
-        let pinNo = Int(readLine()!)!
-            if(validatePin(index:index,pinNo:pinNo)){
+        func withdrawal(index : Int){
         print("Enter amount in multiple of Rs 100")
          let amt = Int(readLine()!)!
             if(amt <= totalCash){
@@ -98,7 +99,7 @@ class ATM :BankingSystem{
                         }
                         else{
                            
-                            cards[index].account.accBalance -= amt
+                            ban.cards[index].account.accBalance -= Double(amt)
                            
                             printTransactionReciept(index :index ,amt:amt)
                             totalCash = totalCash - amt
@@ -115,67 +116,23 @@ class ATM :BankingSystem{
             else{
                 print("Insufficient balance in ATM")
             }
-        } // end validate pin
-        else{
-            cards[index].account.pinValidationCount += 1
-            if(!(validatePinInvalidCount(index:index))) {
-                cards[index].account.accStatus = false
-               print("Account has been blocked permanently...Due to three invalid attempts")
-            }
-            else{
-                print("invalid pin.. try again")
-            }
         }
-        }
-     else{
-          print("Account has been blocked permanently")
-                }
-            }
-        
-    else{
-                print("Invalid account no .Account doesnot exist")
-            }
-        }
-        
-    
-                
-    
-        func  balanceEnquiry(){
-            print("Enter account No")
-            let accountNo = Int(readLine()!)!
-            let index = getCardsByIndex(accountNo: accountNo)
-            if(index != -1){
-                if(cards[index].account.accStatus){
-                    print("Enter your PIN Code")
-                    let pinNo = Int(readLine()!)!
-                    if(validatePin(index: index, pinNo: pinNo)){
-                       
-                        printBalanceReciept(index:index)
+        func  balanceEnquiry(index: Int){
+            printBalanceReciept(index:index)
                     } // end validatePin
-                    else{
-                        cards[index].account.pinValidationCount += 1
-                        if(!(validatePinInvalidCount(index:index))){
-                                cards[index].account.accStatus  = false
-                                print("Account has been blocked permanently...Due to three invalid attempts")
-                            }
-                            else{
-                                print("invalid pin.. try again")
-                            }
-                        }
-                  } // acc.Status
-                else{
-                    print("Account has been blocked permanently")
-                    }
-                }
-            else{
-                 print("Invalid account no .Account doesnot exist")
-                }
-                        }
-        
-        
-        
-                }
-            
-        
+                    
 
-
+func printTransactionReciept(index: Int,amt:Int){
+print("----------TRANSACTION RECIEPT--------")
+print("Location : Chennai")
+print("Amount Debted : \(amt)")
+    print("Available Balance : \(ban.cards[index].account.accBalance)")
+}
+func printBalanceReciept(index :Int){
+print("----------BALANCE ENQUIRY RECIEPT--------")
+print("Location : Chennai ")
+    print("Available Balance : \(ban.cards[index].account.accBalance )")
+}
+    
+    
+    }
